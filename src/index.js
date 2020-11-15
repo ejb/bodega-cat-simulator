@@ -2,6 +2,7 @@
 /* global ASSET_NAMES */
 
 import { makeSprite, t } from "@replay/core";
+import { Animation } from 'playset';
 
 import * as cansGame from './cans';
 const games = {
@@ -30,6 +31,8 @@ export const gameProps = {
     size: 14,
   },
 };
+
+const timeBetweenLevels = 4000;
 
 export const Game = makeSprite({
   init() {
@@ -65,7 +68,7 @@ export const Game = makeSprite({
     if (state.gameState === 'between-levels') {
       const timeElapsed = new Date() - state.timeStarted;
 
-      if (lives > 0 && timeElapsed > 1000) {
+      if (lives > 0 && timeElapsed > timeBetweenLevels) {
         const nextGame = 'cans';
         return {
           gameData: games[nextGame].init(),
@@ -124,36 +127,64 @@ export const Game = makeSprite({
     }
     
     if (state.gameState === 'between-levels') {
-      let prevGameSuccessful = null;
-      if (state.levelsCompleted > 0) {
-        prevGameSuccessful = t.text({
-          text: state.prevGameSuccessful ? 'Passed' : 'Failed',
-          font: { name: 'Impact', size: 20 },
-          color: '#222',
-          x: -120,
-          y: 140,
-          align: 'left',
+      const timeElapsed = new Date() - state.timeStarted;
+
+      let gameOver = null;
+      if (state.lives <= 0) {
+        gameOver = t.text({
+          text: `Game Over`,
+          font: { name: 'Impact', size: 24 },
+          color: '#FFF1E8',
+          x: 0,
+          y: 75,
+          align: 'center',
         });
       }
-      const nextLevel = t.text({
-        text: state.lives > 0 ? `Level ${state.levelsCompleted + 1}` : `Game Over`,
-        font: { name: 'Impact', size: 24 },
-        color: '#222',
-        x: 0,
-        y: 0,
-        align: 'center',
-      });
+      
+      let getReady = null;
+      if (state.lives > 0 && timeElapsed > timeBetweenLevels * 0.5) {
+        getReady = t.text({
+          text: `Get ready!`,
+          font: { name: 'Impact', size: 24 },
+          color: '#FFF1E8',
+          x: 0,
+          y: 75,
+          align: 'center',
+        });
+      }
+      
       const lives = t.text({
         text: `Lives: ${state.lives}`,
         font: { name: 'Impact', size: 20 },
-        color: '#222',
+        color: '#FFF1E8',
         x: -120,
-        y: -100,
+        y: -120,
         align: 'left',
       });
+      
+      let counterArray = [0];
+      if (state.levelsCompleted > 0 && timeElapsed < timeBetweenLevels * 0.5) {
+        if (state.prevGameSuccessful) {
+          counterArray = [1, 2];
+        } else {
+          counterArray = [3, 4];
+        }
+      }
+      const counterImage = Animation({
+        fileName: 'BC-counter.png',
+        width: 300,
+        height: 300,
+        x: 0,
+        y: 0,
+        columns: 4,
+        rows: 2,
+        fps: 2,
+        frameArray: counterArray,
+      })
       return [
-        prevGameSuccessful,
-        nextLevel,
+        counterImage,
+        gameOver,
+        getReady,
         lives,
       ]
     }

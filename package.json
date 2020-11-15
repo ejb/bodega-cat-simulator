@@ -20,6 +20,7 @@
     "@replay/core": "0.7.0",
     "@replay/web": "0.7.0",
     "core-js": "^3.6.5",
+    "playset": "git+https://github.com/ejb/playset.git",
     "regenerator-runtime": "^0.13.5"
   },
   "devDependencies": {
