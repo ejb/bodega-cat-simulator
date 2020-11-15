@@ -27,11 +27,14 @@ export function loop({ state, device }) {
   
   const showShout = gameData.hits >= maxHits && timeSinceLastHit > 700;
   
+  const success = hits >= maxHits;
+  
   return {
     hits,
     lastHitTime,
     timeSinceLastHit,
     showShout,
+    success,
   };
 
 }
