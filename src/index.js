@@ -34,12 +34,7 @@ export const gameProps = {
 export const Game = makeSprite({
   init() {
     return {
-      gameData: null,
-      timeStarted: Date.now(),
-      timeRemaining: 5,
-      activeGame: null,
-      levelsCompleted: 0,
-      lives: 3,
+      gameState: 'start-screen',
     };
   },
 
@@ -52,23 +47,51 @@ export const Game = makeSprite({
       lives,
     } = state;
     
-    if (lives > 0 && activeGame === null && device.inputs.keysJustPressed[' ']) {
-      activeGame = 'cans';
-      state.gameData = games[activeGame].init();
-      timeStarted = new Date();
+    if (state.gameState === 'start-screen') {
+      if (device.inputs.keysJustPressed[' ']) {
+        // start new round
+        return {
+          gameData: null,
+          activeGame: null,
+          levelsCompleted: 0,
+          lives: 3,
+          gameState: 'between-levels',
+          timeStarted: new Date(),
+        }
+      }
+      return state;
     }
+    
+    if (state.gameState === 'between-levels') {
+      const timeElapsed = new Date() - state.timeStarted;
+
+      if (lives > 0 && timeElapsed > 1000) {
+        const nextGame = 'cans';
+        return {
+          gameData: games[nextGame].init(),
+          timeStarted: new Date(),
+          timeRemaining: 5,
+          activeGame: nextGame,
+          levelsCompleted: state.levelsCompleted + 1,
+          lives: state.lives,
+          gameState: 'in-level',
+        }
+      }
+      return state;
+    }
+    
+    // assume in-level
     
     const timeElapsed = new Date() - timeStarted;
     const timeRemaining = 5 - (timeElapsed / 1000);
 
     let gameData = null;
-    if (activeGame && timeRemaining > 0) {
+    if (timeRemaining > 0) {
       gameData = games[activeGame].loop({ state, device });
       prevGameSuccessful = gameData.success;
-    } else if (activeGame) {
+    } else {
       // game over
       activeGame = null;
-      levelsCompleted += 1;
       if (prevGameSuccessful === false) {
         lives -= 1;
       }
@@ -76,18 +99,18 @@ export const Game = makeSprite({
     
     return {
       gameData,
-      timeStarted,
-      timeRemaining,
+      timeStarted: timeRemaining > 0 ? timeStarted : new Date(),
       activeGame,
       prevGameSuccessful,
       levelsCompleted,
       lives,
+      gameState: timeRemaining > 0 ? 'in-level' : 'between-levels',
     }
   },
 
   render({ state }) {
     
-    if (state.activeGame === null) {
+    if (state.gameState === 'start-screen') {
       const title = t.text({
         text: 'BODEGA CAT SIMULATOR',
         font: { name: 'Impact', size: 26 },
@@ -95,21 +118,30 @@ export const Game = makeSprite({
         x: 0,
         y: 0,
       });
-      const prevGameSuccessful = t.text({
-        text: state.prevGameSuccessful ? 'Passed' : 'Failed',
-        font: { name: 'Impact', size: 20 },
+      return [
+        title,
+      ];
+    }
+    
+    if (state.gameState === 'between-levels') {
+      let prevGameSuccessful = null;
+      if (state.levelsCompleted > 0) {
+        prevGameSuccessful = t.text({
+          text: state.prevGameSuccessful ? 'Passed' : 'Failed',
+          font: { name: 'Impact', size: 20 },
+          color: '#222',
+          x: -120,
+          y: 140,
+          align: 'left',
+        });
+      }
+      const nextLevel = t.text({
+        text: state.lives > 0 ? `Level ${state.levelsCompleted + 1}` : `Game Over`,
+        font: { name: 'Impact', size: 24 },
         color: '#222',
-        x: -120,
-        y: -140,
-        align: 'left',
-      });
-      const levelsCompleted = t.text({
-        text: `Level ${state.levelsCompleted + 1}`,
-        font: { name: 'Impact', size: 20 },
-        color: '#222',
-        x: -120,
-        y: -120,
-        align: 'left',
+        x: 0,
+        y: 0,
+        align: 'center',
       });
       const lives = t.text({
         text: `Lives: ${state.lives}`,
@@ -120,17 +152,20 @@ export const Game = makeSprite({
         align: 'left',
       });
       return [
-        title,
         prevGameSuccessful,
-        levelsCompleted,
+        nextLevel,
         lives,
       ]
     }
     
+    // else assume in-level
+    
     const gameContent = games[state.activeGame].render({ state });
+    const timeElapsed = new Date() - state.timeStarted;
+    const timeRemaining = 5 - (timeElapsed / 1000);
     
     const timer = t.text({
-      text: state.timeRemaining.toFixed(1),
+      text: timeRemaining.toFixed(1),
       font: { name: 'Impact', size: 16 },
       x: -140,
       y: -130,
@@ -138,9 +173,8 @@ export const Game = makeSprite({
       align: 'left',
     });
     
-    const timeBarWidth = 280 * (state.timeRemaining / 5);
+    const timeBarWidth = 280 * (timeRemaining / 5);
     const timeBar = t.rectangle({
-      text: state.timeRemaining.toFixed(1),
       x: (280 - timeBarWidth) * -0.5,
       y: -140,
       width: timeBarWidth,
