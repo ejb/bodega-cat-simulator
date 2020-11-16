@@ -8,7 +8,7 @@ export function init() {
   }
 }
 
-const hitLength = 200;
+const hitLength = 250;
 const maxHits = 9;
 
 export function loop({ state, device }) {
@@ -112,6 +112,18 @@ export function render({ state }) {
     index: nettingIndex,
   });
   
+  let strike = null;
+  if (gameData.timeSinceLastHit < 75) {
+    strike = t.image({
+      fileName: 'BC-cans-strike.png',
+      width: 69,
+      height: 75,
+      x: 0,
+      y: 20,
+    });
+  }
+  
+  
   return [
     background,
     stack,
@@ -119,5 +131,6 @@ export function render({ state }) {
     fallenCan,
     cat,
     shout,
+    strike,
   ]
 }

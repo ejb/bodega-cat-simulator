@@ -163,6 +163,12 @@ export const Game = makeSprite({
       });
       
       let counterArray = [0];
+      if (state.lives === 0 && timeElapsed < timeBetweenLevels * 0.5) {
+        counterArray = [3, 4];
+      }
+      if (state.lives > 0 && timeElapsed < timeBetweenLevels * 0.5) {
+        counterArray = [1, 2];
+      }
       if (state.levelsCompleted > 0 && timeElapsed < timeBetweenLevels * 0.5) {
         if (state.prevGameSuccessful) {
           counterArray = [1, 2];
