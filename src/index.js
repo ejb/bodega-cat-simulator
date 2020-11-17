@@ -144,7 +144,7 @@ export const Game = makeSprite({
       let getReady = null;
       if (state.lives > 0 && timeElapsed > timeBetweenLevels * 0.5) {
         getReady = t.text({
-          text: `Get ready!`,
+          text: `Level ${state.levelsCompleted + 1}`,
           font: { name: 'Impact', size: 24 },
           color: '#FFF1E8',
           x: 0,
@@ -219,9 +219,23 @@ export const Game = makeSprite({
       color: 'white',
     });
     
+    let instructions = null;
+    if (timeElapsed < 1000) {
+      instructions = t.text({
+        text: `${games[state.activeGame].instructions}`,
+        font: { name: 'Impact', size: 20 },
+        color: '#FFF1E8',
+        x: 0,
+        y: 120,
+        align: 'center',
+      });
+    }
+    
+    
     const ui = [
       timer,
       timeBar,
+      instructions,
     ];
     
     return [

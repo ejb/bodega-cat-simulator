@@ -1,5 +1,6 @@
 import { makeSprite, t } from "@replay/core";
 
+export const instructions = `Scratch!`;
 
 export function init() {
   return {
