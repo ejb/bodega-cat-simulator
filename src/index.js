@@ -4,9 +4,11 @@
 import { makeSprite, t } from "@replay/core";
 import { Animation } from 'playset';
 
-import * as cansGame from './cans';
+import * as cansGame from './games/cans';
+import * as loafGame from './games/loaf';
 const games = {
   'cans': cansGame,
+  'loaf': loafGame,
 };
 
 export const options = {
@@ -33,6 +35,7 @@ export const gameProps = {
 };
 
 const timeBetweenLevels = 4000;
+// const timeBetweenLevels = 1;
 
 export const Game = makeSprite({
   init() {
@@ -69,7 +72,7 @@ export const Game = makeSprite({
       const timeElapsed = new Date() - state.timeStarted;
 
       if (lives > 0 && timeElapsed > timeBetweenLevels) {
-        const nextGame = 'cans';
+        const nextGame = 'loaf';
         return {
           gameData: games[nextGame].init(),
           timeStarted: new Date(),
