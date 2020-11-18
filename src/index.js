@@ -11,6 +11,8 @@ const games = {
   'loaf': loafGame,
 };
 
+import random from './random';
+
 export const options = {
   loadingTextures: [
     t.text({
@@ -51,6 +53,7 @@ export const Game = makeSprite({
       prevGameSuccessful, 
       levelsCompleted,
       lives,
+      gameList,
     } = state;
     
     if (state.gameState === 'start-screen') {
@@ -63,6 +66,7 @@ export const Game = makeSprite({
           lives: 3,
           gameState: 'between-levels',
           timeStarted: new Date(),
+          gameList: random.order(Object.keys(games)),
         }
       }
       return state;
@@ -72,7 +76,10 @@ export const Game = makeSprite({
       const timeElapsed = new Date() - state.timeStarted;
 
       if (lives > 0 && timeElapsed > timeBetweenLevels) {
-        const nextGame = 'loaf';
+        if (gameList.length === 0) {
+          gameList = random.order(Object.keys(games));
+        }
+        const nextGame = gameList.pop();
         return {
           gameData: games[nextGame].init(),
           timeStarted: new Date(),
@@ -81,6 +88,7 @@ export const Game = makeSprite({
           levelsCompleted: state.levelsCompleted + 1,
           lives: state.lives,
           gameState: 'in-level',
+          gameList,
         }
       }
       return state;
@@ -111,6 +119,7 @@ export const Game = makeSprite({
       levelsCompleted,
       lives,
       gameState: timeRemaining > 0 ? 'in-level' : 'between-levels',
+      gameList,
     }
   },
 
