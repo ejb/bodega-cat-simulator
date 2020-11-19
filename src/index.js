@@ -3,15 +3,24 @@
 
 import { makeSprite, t } from "@replay/core";
 import { Animation } from 'playset';
+import random from './random';
 
 import * as cansGame from './games/cans';
 import * as loafGame from './games/loaf';
+import * as skritchesGame from './games/skritches';
+
+
+
 const games = {
   'cans': cansGame,
-  'loaf': loafGame,
+  // 'loaf': loafGame,
+  // 'skritches': skritchesGame,
 };
+const timeBetweenLevels = 4000;
+// const timeBetweenLevels = 1;
+const defaultSpeed = 1;
+const speedIncrement = 0.25;
 
-import random from './random';
 
 export const options = {
   loadingTextures: [
@@ -36,8 +45,6 @@ export const gameProps = {
   },
 };
 
-const timeBetweenLevels = 4000;
-// const timeBetweenLevels = 1;
 
 export const Game = makeSprite({
   init() {
@@ -54,6 +61,7 @@ export const Game = makeSprite({
       levelsCompleted,
       lives,
       gameList,
+      speed,
     } = state;
     
     if (state.gameState === 'start-screen') {
@@ -67,6 +75,7 @@ export const Game = makeSprite({
           gameState: 'between-levels',
           timeStarted: new Date(),
           gameList: random.order(Object.keys(games)),
+          speed: defaultSpeed,
         }
       }
       return state;
@@ -75,9 +84,10 @@ export const Game = makeSprite({
     if (state.gameState === 'between-levels') {
       const timeElapsed = new Date() - state.timeStarted;
 
-      if (lives > 0 && timeElapsed > timeBetweenLevels) {
+      if (lives > 0 && timeElapsed > (timeBetweenLevels / speed)) {
         if (gameList.length === 0) {
           gameList = random.order(Object.keys(games));
+          speed += speedIncrement;
         }
         const nextGame = gameList.pop();
         return {
@@ -89,6 +99,7 @@ export const Game = makeSprite({
           lives: state.lives,
           gameState: 'in-level',
           gameList,
+          speed,
         }
       }
       return state;
@@ -97,7 +108,7 @@ export const Game = makeSprite({
     // assume in-level
     
     const timeElapsed = new Date() - timeStarted;
-    const timeRemaining = 5 - (timeElapsed / 1000);
+    const timeRemaining = 5 - (timeElapsed / 1000 * speed);
 
     let gameData = null;
     if (timeRemaining > 0) {
@@ -120,10 +131,13 @@ export const Game = makeSprite({
       lives,
       gameState: timeRemaining > 0 ? 'in-level' : 'between-levels',
       gameList,
+      speed,
     }
   },
 
   render({ state }) {
+    
+    const {speed} = state;
     
     if (state.gameState === 'start-screen') {
       const title = t.text({
@@ -154,7 +168,7 @@ export const Game = makeSprite({
       }
       
       let getReady = null;
-      if (state.lives > 0 && timeElapsed > timeBetweenLevels * 0.5) {
+      if (state.lives > 0 && timeElapsed > (timeBetweenLevels * 0.5 / speed)) {
         getReady = t.text({
           text: `Level ${state.levelsCompleted + 1}`,
           font: { name: 'Impact', size: 24 },
@@ -175,13 +189,13 @@ export const Game = makeSprite({
       });
       
       let counterArray = [0];
-      if (state.lives === 0 && timeElapsed < timeBetweenLevels * 0.5) {
+      if (state.lives === 0 && timeElapsed < timeBetweenLevels * 0.5 / speed) {
         counterArray = [3, 4];
       }
-      if (state.lives > 0 && timeElapsed < timeBetweenLevels * 0.5) {
+      if (state.lives > 0 && timeElapsed < timeBetweenLevels * 0.5 / speed) {
         counterArray = [1, 2];
       }
-      if (state.levelsCompleted > 0 && timeElapsed < timeBetweenLevels * 0.5) {
+      if (state.levelsCompleted > 0 && timeElapsed < timeBetweenLevels * 0.5 / speed) {
         if (state.prevGameSuccessful) {
           counterArray = [1, 2];
         } else {
@@ -196,7 +210,7 @@ export const Game = makeSprite({
         y: 0,
         columns: 4,
         rows: 2,
-        fps: 2,
+        fps: 2 * speed,
         frameArray: counterArray,
       })
       return [
@@ -211,7 +225,7 @@ export const Game = makeSprite({
     
     const gameContent = games[state.activeGame].render({ state });
     const timeElapsed = new Date() - state.timeStarted;
-    const timeRemaining = 5 - (timeElapsed / 1000);
+    const timeRemaining = 5 - (timeElapsed / 1000 * speed);
     
     const timer = t.text({
       text: timeRemaining.toFixed(1),

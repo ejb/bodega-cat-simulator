@@ -14,19 +14,19 @@ const maxHits = 9;
 
 export function loop({ state, device }) {
   
-  const { gameData } = state;
+  const { gameData, speed } = state;
   let { lastHitTime, hits } = gameData;
   
   const now = new Date();
   const timeSinceLastHit = now - lastHitTime;
   
   
-  if (hits < maxHits && timeSinceLastHit > hitLength && device.inputs.keysJustPressed[' ']) {
+  if (hits < maxHits && timeSinceLastHit > hitLength / speed && device.inputs.keysJustPressed[' ']) {
     hits += 1;
     lastHitTime = new Date();
   }
   
-  const showShout = gameData.hits >= maxHits && timeSinceLastHit > 700;
+  const showShout = gameData.hits >= maxHits && timeSinceLastHit > 700 / speed;
   
   const success = hits >= maxHits;
   
@@ -42,7 +42,7 @@ export function loop({ state, device }) {
 
 export function render({ state }) {
   
-  const { gameData = {} } = state;
+  const { gameData = {}, speed } = state;
   
   const background = t.rectangle({
     width: 300,
@@ -52,7 +52,7 @@ export function render({ state }) {
     color: '#222',
   })
   
-  const catIndex = gameData.timeSinceLastHit > hitLength ? 0 : 1;
+  const catIndex = gameData.timeSinceLastHit > hitLength / speed ? 0 : 1;
   const cat = t.spriteSheet({
     fileName: 'BC-cans-cat.png',
     width: 130,
