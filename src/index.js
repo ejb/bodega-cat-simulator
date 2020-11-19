@@ -13,8 +13,8 @@ import * as skritchesGame from './games/skritches';
 
 const games = {
   'cans': cansGame,
-  // 'loaf': loafGame,
-  // 'skritches': skritchesGame,
+  'loaf': loafGame,
+  'skritches': skritchesGame,
 };
 const timeBetweenLevels = 4000;
 // const timeBetweenLevels = 1;

@@ -21,7 +21,7 @@ export function init() {
 
 export function loop({ state, device }) {
   
-  const { gameData } = state;
+  const { gameData, speed } = state;
   let { targetX, x, y, success, arms } = gameData;
   
   if (gameData.success) {
@@ -31,13 +31,13 @@ export function loop({ state, device }) {
   }
   
   if (device.inputs.keysDown.ArrowLeft) {
-     targetX -= 1;
+     targetX -= 1 * speed;
   } else if (device.inputs.keysDown.ArrowRight) {
-     targetX += 1;
+     targetX += 1 * speed;
   }
   
   arms.forEach(arm => {
-    arm.y -= 0.95;
+    arm.y -= 0.95 * speed;
     if (arm.y <= 50) {
       arm.y = 50;
     }
