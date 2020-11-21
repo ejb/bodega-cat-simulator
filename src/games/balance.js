@@ -8,22 +8,25 @@ export function init() {
   return {
     catX: 0,
     tilt,
-    catY: 100,
+    catY: 80,
     boxes: [{
       initialAngle: 1,
       angle: 1,
       x: 0,
-      y: 20
+      y: 10,
+      width: 95,
     }, {
       initialAngle: 0.5,
       angle: 0.5,
       x: 0,
-      y: -50
+      y: -62,
+      width: 95,
     }, {
       initialAngle: 0.25,
       angle: 0.25,
       x: 0,
-      y: -120
+      y: -124,
+      width: 95,
     }],
     success: true,
   }
@@ -44,7 +47,7 @@ export function loop({ state, device }) {
       box.y += (-115 - box.y) / fallSpeed * (i+1);
     });
     
-    catY += (-100 - catY) / fallSpeed;
+    catY += (-115 - catY) / fallSpeed;
 
     return {
       ... gameData,
@@ -97,17 +100,21 @@ export function render({ state }) {
       
   const cat = t.image({
     fileName: 'BC-balance-cat.png',
-    width: 100,
-    height: 100,
+    width: 71,
+    height: 78,
     x: gameData.catX,
     y: gameData.catY,
+    rotation: gameData.tilt * 0.002,
   });
   
   const boxes = gameData.boxes.map((box, i) => {
-    return t.rectangle({
-      color: 'brown',
-      width: 70,
-      height: 70,
+    return t.spriteSheet({
+      fileName: 'BC-balance-boxes.png',
+      columns: 3,
+      rows: 3,
+      index: i,
+      width: box.width,
+      height: box.width,
       x: gameData.tilt * 0.01 * box.initialAngle,
       y: box.y,
       rotation: gameData.tilt * 0.002 * box.angle,
@@ -117,7 +124,7 @@ export function render({ state }) {
   
   return [
     background,
-    ... boxes,
+    ... boxes.reverse(),
     cat,
   ]
 }
