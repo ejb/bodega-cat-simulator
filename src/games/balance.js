@@ -10,13 +10,19 @@ export function init() {
     tilt,
     catY: 100,
     boxes: [{
+      initialAngle: 1,
       angle: 1,
+      x: 0,
       y: 20
     }, {
+      initialAngle: 0.5,
       angle: 0.5,
+      x: 0,
       y: -50
     }, {
+      initialAngle: 0.25,
       angle: 0.25,
+      x: 0,
       y: -120
     }],
     success: true,
@@ -26,11 +32,25 @@ export function init() {
 export function loop({ state, device }) {
   
   const { gameData, speed } = state;
-  let { catX, catY, success, tilt, } = gameData;
+  let { catX, catY, success, tilt, boxes, } = gameData;
+  
+  const fallSpeed = 5 * speed;
   
   if (!success) {
+    boxes.forEach((box, i) => {
+      const targetX = tilt / 1000;
+      box.angle += (- box.angle) / fallSpeed * (i+1);
+      box.x += (targetX - box.x) / fallSpeed * (i+1);
+      box.y += (-115 - box.y) / fallSpeed * (i+1);
+    });
+    
+    catY += (-100 - catY) / fallSpeed;
+
     return {
       ... gameData,
+      tilt,
+      boxes,
+      catY,
     };
   }
   const tiltSpeed = 1 + ((speed - 1) * 0.01);
@@ -47,7 +67,6 @@ export function loop({ state, device }) {
   
   if (Math.abs(catX) > 60) {
     success = false;
-    catY = -100;
     catX = 100 * Math.sign(tilt);
   }
   
@@ -89,7 +108,7 @@ export function render({ state }) {
       color: 'brown',
       width: 70,
       height: 70,
-      x: gameData.tilt * 0.01 * box.angle,
+      x: gameData.tilt * 0.01 * box.initialAngle,
       y: box.y,
       rotation: gameData.tilt * 0.002 * box.angle,
     });
