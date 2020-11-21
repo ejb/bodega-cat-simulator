@@ -4,6 +4,7 @@
 import { makeSprite, t } from "@replay/core";
 import { Animation } from 'playset';
 import random from './random';
+import { AnimatedSequence } from './animated-sequence';
 
 import * as cansGame from './games/cans';
 import * as loafGame from './games/loaf';
@@ -140,15 +141,44 @@ export const Game = makeSprite({
     const {speed} = state;
     
     if (state.gameState === 'start-screen') {
-      const title = t.text({
-        text: 'BODEGA CAT SIMULATOR',
-        font: { name: 'Impact', size: 26 },
-        color: '#FF004D',
+      const title = t.image({
+        fileName: 'BC-start.png',
         x: 0,
         y: 0,
+        width: 300,
+        height: 300,
+      });
+      const startMessage = AnimatedSequence({
+        id: 'start-message-animation',
+        x: 0,
+        y: 0,
+        fps: 1.2,
+        frames: [
+          [
+            /* blank */
+          ],
+          [
+            t.rectangle({
+              text: 'Press Spacebar',
+              x: 0,
+              y: 0,
+              width: 180,
+              height: 40,
+              color: '#FF004D',
+            }),
+            t.text({
+              text: 'Press Spacebar',
+              x: 0,
+              y: 0,
+              font: { name: 'Impact', size: 26 },
+              color: '#FFEC27',
+            }),
+          ],
+        ]
       });
       return [
         title,
+        startMessage,
       ];
     }
     
@@ -203,6 +233,7 @@ export const Game = makeSprite({
         }
       }
       const counterImage = Animation({
+        id: 'counter-image-animation',
         fileName: 'BC-counter.png',
         width: 300,
         height: 300,

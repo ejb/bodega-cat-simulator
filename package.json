@@ -14,7 +14,8 @@
     "serve": "serve web/dist",
     "test": "jest",
     "test:watch": "jest --watch",
-    "ci": "npm run lint && npm run build && npm run test"
+    "ci": "npm run lint && npm run build && npm run test",
+    "zip": "npm run build-web && zip -r dist.zip ./web/dist/"
   },
   "dependencies": {
     "@replay/core": "0.7.0",
