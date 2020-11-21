@@ -48,6 +48,7 @@ export function loop({ state, device }) {
   if (gameData.success) {
     return {
       ... gameData,
+      timeInBox: (gameData.timeInBox || 0) + 1,
     };
   }
   
@@ -63,7 +64,7 @@ export function loop({ state, device }) {
     position = 2;
   }
   
-  if (device.inputs.keysJustPressed[' ']) {
+  if (device.inputs.keysJustPressed[' '] || device.inputs.keysJustPressed.ArrowDown) {
     if (gameData.boxes[position].index === gameData.cat.index) {
       success = true;
     }
@@ -159,8 +160,19 @@ export function render({ state }) {
     opacity: (!gameData.success && gameData.position < 2) ? 1 : 0,
   });
   
-  
-  
+  let heart = null;
+  if (gameData.success && gameData.timeInBox > 40 / state.speed) {
+    heart = t.spriteSheet({
+      x: positionOffset - 30,
+      y: 20,
+      fileName: 'BC-loaf.png',
+      width: 100,
+      height: 100,
+      columns: 12,
+      rows: 6,
+      index: 24,
+    });
+  }
   
   return [
     background,
@@ -169,5 +181,6 @@ export function render({ state }) {
     ... boxes,
     cat,
     ... boxInsides,
+    heart,
   ]
 }
