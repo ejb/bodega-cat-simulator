@@ -9,16 +9,17 @@ import { AnimatedSequence } from './animated-sequence';
 import * as cansGame from './games/cans';
 import * as loafGame from './games/loaf';
 import * as skritchesGame from './games/skritches';
-
+import * as balanceGame from './games/balance';
 
 
 const games = {
-  'cans': cansGame,
-  'loaf': loafGame,
-  'skritches': skritchesGame,
+  // 'cans': cansGame,
+  // 'loaf': loafGame,
+  // 'skritches': skritchesGame,
+  'balance': balanceGame,
 };
-const timeBetweenLevels = 4000;
-// const timeBetweenLevels = 1;
+// const timeBetweenLevels = 4000;
+const timeBetweenLevels = 1;
 const defaultSpeed = 1;
 const speedIncrement = 0.25;
 
