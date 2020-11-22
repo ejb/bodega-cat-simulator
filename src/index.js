@@ -11,6 +11,7 @@ import * as loafGame from './games/loaf';
 import * as skritchesGame from './games/skritches';
 import * as balanceGame from './games/balance';
 import * as catchGame from './games/catch';
+import * as instaGame from './games/insta';
 
 
 const games = {
@@ -19,6 +20,7 @@ const games = {
   'skritches': skritchesGame,
   'balance': balanceGame,
   'catch': catchGame,
+  'insta': instaGame,
 };
 const timeBetweenLevels = 4000;
 // const timeBetweenLevels = 1;
