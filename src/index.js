@@ -10,16 +10,18 @@ import * as cansGame from './games/cans';
 import * as loafGame from './games/loaf';
 import * as skritchesGame from './games/skritches';
 import * as balanceGame from './games/balance';
+import * as catchGame from './games/catch';
 
 
 const games = {
-  'cans': cansGame,
-  'loaf': loafGame,
-  'skritches': skritchesGame,
-  'balance': balanceGame,
+  // 'cans': cansGame,
+  // 'loaf': loafGame,
+  // 'skritches': skritchesGame,
+  // 'balance': balanceGame,
+  'catch': catchGame,
 };
-const timeBetweenLevels = 4000;
-// const timeBetweenLevels = 1;
+// const timeBetweenLevels = 4000;
+const timeBetweenLevels = 1;
 const defaultSpeed = 1;
 const speedIncrement = 0.25;
 
