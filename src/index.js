@@ -14,14 +14,14 @@ import * as catchGame from './games/catch';
 
 
 const games = {
-  // 'cans': cansGame,
-  // 'loaf': loafGame,
-  // 'skritches': skritchesGame,
-  // 'balance': balanceGame,
+  'cans': cansGame,
+  'loaf': loafGame,
+  'skritches': skritchesGame,
+  'balance': balanceGame,
   'catch': catchGame,
 };
-// const timeBetweenLevels = 4000;
-const timeBetweenLevels = 1;
+const timeBetweenLevels = 4000;
+// const timeBetweenLevels = 1;
 const defaultSpeed = 1;
 const speedIncrement = 0.25;
 const maxSpeed = 2.5;
@@ -109,7 +109,13 @@ export const Game = makeSprite({
           gameList,
           speed,
         }
+      } else if (lives <= 0  && timeElapsed > (timeBetweenLevels * 1.5)) {
+        // reset entire game
+        return {
+          gameState: 'start-screen',
+        };
       }
+      
       return state;
     }
     
