@@ -26,10 +26,6 @@ export const AnimatedSequence = makeSprite({
     
     const {frames, fps} = props; 
 
-    if (!frames) {
-      debugger;
-    }
-
     const totalFrames = frames.length;    
     const ticksPerFrame = 60 / fps; // 7.5
     

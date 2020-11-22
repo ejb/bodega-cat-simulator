@@ -5,6 +5,7 @@ import { makeSprite, t } from "@replay/core";
 import { Animation } from 'playset';
 import random from './random';
 import { AnimatedSequence } from './animated-sequence';
+import { Transition } from './transition';
 
 import * as cansGame from './games/cans';
 import * as loafGame from './games/loaf';
@@ -307,6 +308,17 @@ export const Game = makeSprite({
       });
     }
     
+    const counterImage = t.spriteSheet({
+      fileName: 'BC-counter.png',
+      width: 300,
+      height: 300,
+      x: 0,
+      y: 0,
+      columns: 4,
+      rows: 2,
+      index: 0,
+    });
+    
     
     const ui = [
       timer,
@@ -314,8 +326,24 @@ export const Game = makeSprite({
       instructions,
     ];
     
+    let gameInTransition = Transition({
+      id: 'transition-in',
+      children: gameContent,
+      duration: 12,
+    });
+
+    if (timeRemaining < 0.12) {
+      gameInTransition = Transition({
+        id: 'transition-out',
+        children: gameContent,
+        duration: 12,
+        reverse: true,
+      });
+    }
+    
     return [
-      ...gameContent,
+      counterImage,
+      gameInTransition,
       ...ui,
     ];
   
