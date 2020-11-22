@@ -14,6 +14,7 @@ Sound effects:
 - https://freesound.org/people/Piotr123/sounds/474094/
 - https://freesound.org/people/AlienXXX/sounds/150384/
 - https://freesound.org/people/dwsolo/sounds/24021/
+- https://freesound.org/people/jdaniel1999/sounds/376205/
 
 ## Structure
 

@@ -31,6 +31,7 @@ export function loop({ state, device }) {
   const nextMove = moves[poseCount];
   if (device.inputs.keysJustPressed[`Arrow${nextMove}`]) {
     poseCount += 1;
+    device.audio('376205__jdaniel1999__camera-shutter.mp3').play(0);
   }
   
   if (poseCount === moves.length) {

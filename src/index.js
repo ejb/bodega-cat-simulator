@@ -47,7 +47,7 @@ export const gameProps = {
     height: 300,
   },
   defaultFont: {
-    name: "Arial",
+    name: "Impact",
     size: 14,
   },
 };
