@@ -44,7 +44,7 @@ export function loop({ state, device }) {
   if (!pawDown && device.inputs.keysJustPressed[' ']) {
      if (mouseX > - catchRange - 10 && mouseX < catchRange - 10) {
        success = true;
-       device.audio('445958__breviceps__cartoon-bat-mouse-squeak.wav').play();
+       device.audio('445958__breviceps__cartoon-bat-mouse-squeak.mp3').play();
      } else {
        device.audio('146968__zabuhailo__catgrowls.wav').play();
      }
