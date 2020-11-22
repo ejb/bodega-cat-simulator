@@ -8,15 +8,19 @@ const catchRange = 50;
 export function init() {
   return {
     mouseX: 165,
+    mouseSpeed: 1.5,
+    mouseAcceleration: 1,
     pawDown: false,
     success: false,
+    delay: random.number([50, 100]),
+    ticker: 0,
   }
 }
 
 export function loop({ state, device }) {
   
   const { gameData, speed } = state;
-  let { mouseX, success, pawDown } = gameData;
+  let { mouseX, success, pawDown, mouseSpeed, mouseAcceleration, delay, ticker } = gameData;
   
   if (gameData.success) {
     return {
@@ -24,7 +28,18 @@ export function loop({ state, device }) {
     };
   }
   
-  mouseX -= 1.5 * speed;
+  if (ticker > delay / speed) {
+    mouseAcceleration += random.number([-0.02, 0.02]);
+    mouseSpeed *= mouseAcceleration;
+    if (mouseSpeed < 1.5) {
+      mouseSpeed = 1.5;
+      mouseAcceleration = 1;
+    }
+    if (mouseSpeed > 4) {
+      mouseSpeed = 4;
+    }
+    mouseX -= mouseSpeed * speed;
+  }
   
   if (!pawDown && device.inputs.keysJustPressed[' ']) {
      pawDown = true;
@@ -37,7 +52,11 @@ export function loop({ state, device }) {
   return {
     pawDown,
     mouseX,
+    mouseSpeed,
+    mouseAcceleration,
     success,
+    delay,
+    ticker: ticker + 1,
   }
 
 }

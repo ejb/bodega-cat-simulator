@@ -24,6 +24,7 @@ const games = {
 const timeBetweenLevels = 1;
 const defaultSpeed = 1;
 const speedIncrement = 0.25;
+const maxSpeed = 2.5;
 
 
 export const options = {
@@ -92,6 +93,9 @@ export const Game = makeSprite({
         if (gameList.length === 0) {
           gameList = random.order(Object.keys(games));
           speed += speedIncrement;
+          if (speed > maxSpeed) {
+            speed = maxSpeed;
+          }
         }
         const nextGame = gameList.pop();
         return {
