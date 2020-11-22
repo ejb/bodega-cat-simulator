@@ -7,12 +7,14 @@ export function init() {
   const arms = [{
     start: 0,
     x: random.number([-100, 100]),
+    targetX: random.number([-100, 100]),
     y: 250,
     index: random.integer([0, 4]),
   }];
+  const x = random.number([-75, 75]);
   return {
-    targetX: 0,
-    x: 0,
+    targetX: x,
+    x,
     y: -100,
     success: false,
     arms,
@@ -41,6 +43,8 @@ export function loop({ state, device }) {
     if (arm.y <= 50) {
       arm.y = 50;
     }
+    
+    arm.x += (arm.targetX - arm.x) / 100;
     
     if (arm.y <= 50 && Math.abs(arm.x - x) < 50) {
       success = true;
