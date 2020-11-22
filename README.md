@@ -2,6 +2,8 @@
 
 An open source game made during [Replay Game Jam](https://itch.io/jam/replay-game-jam).
 
+[Play it here!](https://pawprints.itch.io/bodega-cat-simulator)
+
 ## Audio credits
 
 Music: [Chipho by RoccoW](https://roccow.bandcamp.com/track/chipho)
