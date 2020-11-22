@@ -52,10 +52,14 @@ export function loop({ state, device }) {
     };
   }
   
+  const soundEffect = device.audio('515823__matrixxx__select-granted-04.mp3');
+  
   if (device.inputs.keysJustPressed.ArrowLeft) {
     position -= 1;
+    soundEffect.play();
   } else if (device.inputs.keysJustPressed.ArrowRight) {
     position += 1;
+    soundEffect.play();
   }
   
   if (position < 0) {
@@ -65,6 +69,7 @@ export function loop({ state, device }) {
   }
   
   if (device.inputs.keysJustPressed[' '] || device.inputs.keysJustPressed.ArrowDown) {
+    soundEffect.play();
     if (gameData.boxes[position].index === gameData.cat.index) {
       success = true;
     }

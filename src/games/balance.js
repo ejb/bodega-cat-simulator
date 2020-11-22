@@ -71,6 +71,7 @@ export function loop({ state, device }) {
   if (Math.abs(catX) > 60) {
     success = false;
     catX = 100 * Math.sign(tilt);
+    device.audio('198876__bone666138__crash.aiff').play();
   }
   
   return {

@@ -2,6 +2,19 @@
 
 An open source game made during [Replay Game Jam](https://itch.io/jam/replay-game-jam).
 
+## Audio credits
+
+Music: [Chipho by RoccoW](https://roccow.bandcamp.com/track/chipho)
+
+Sound effects:
+
+- https://freesound.org/people/Zabuhailo/sounds/146968/
+- https://freesound.org/people/Breviceps/sounds/445958/
+- https://freesound.org/people/MATRIXXX_/sounds/515823/
+- https://freesound.org/people/Piotr123/sounds/474094/
+- https://freesound.org/people/AlienXXX/sounds/150384/
+- https://freesound.org/people/dwsolo/sounds/24021/
+
 ## Structure
 
 - `assets`: Assets like audio and images go here. Nested folders are not currently supported.

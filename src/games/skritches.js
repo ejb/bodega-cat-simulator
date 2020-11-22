@@ -44,6 +44,7 @@ export function loop({ state, device }) {
     
     if (arm.y <= 50 && Math.abs(arm.x - x) < 50) {
       success = true;
+      device.audio('24021__dwsolo__themba4.wav').play();
     }
   });
   

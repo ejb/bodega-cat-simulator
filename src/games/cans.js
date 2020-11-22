@@ -10,7 +10,7 @@ export function init() {
 }
 
 const hitLength = 250;
-const maxHits = 9;
+const maxHits = 8;
 
 export function loop({ state, device }) {
   
@@ -24,6 +24,10 @@ export function loop({ state, device }) {
   if (hits < maxHits && timeSinceLastHit > hitLength / speed && device.inputs.keysJustPressed[' ']) {
     hits += 1;
     lastHitTime = new Date();
+    device.audio('150384__alienxxx__hit-rub-002.wav').play();
+    if (hits === maxHits) {
+      device.audio('474094__piotr123__bang.wav').play();
+    }
   }
   
   const showShout = gameData.hits >= maxHits && timeSinceLastHit > 700 / speed;

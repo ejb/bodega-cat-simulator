@@ -42,11 +42,13 @@ export function loop({ state, device }) {
   }
   
   if (!pawDown && device.inputs.keysJustPressed[' ']) {
-     pawDown = true;
-     console.log(mouseX)
      if (mouseX > - catchRange - 10 && mouseX < catchRange - 10) {
        success = true;
+       device.audio('445958__breviceps__cartoon-bat-mouse-squeak.wav').play();
+     } else {
+       device.audio('146968__zabuhailo__catgrowls.wav').play();
      }
+     pawDown = true;
   }
     
   return {
