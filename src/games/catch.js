@@ -50,6 +50,10 @@ export function loop({ state, device }) {
      }
      pawDown = true;
   }
+  
+  if (mouseX < -150) {
+    pawDown = true;
+  }
     
   return {
     pawDown,
