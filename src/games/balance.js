@@ -4,7 +4,7 @@ import random from '../random';
 export const instructions = `Balance!`;
 
 export function init() {
-  const tilt = random.number([-75, 75]);
+  const tilt = random.number([50, 75]) * random.direction({zero: false});
   return {
     catX: 0,
     tilt,

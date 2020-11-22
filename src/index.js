@@ -14,11 +14,11 @@ import * as catchGame from './games/catch';
 
 
 const games = {
-  // 'cans': cansGame,
-  // 'loaf': loafGame,
-  // 'skritches': skritchesGame,
+  'cans': cansGame,
+  'loaf': loafGame,
+  'skritches': skritchesGame,
   'balance': balanceGame,
-  // 'catch': catchGame,
+  'catch': catchGame,
 };
 const timeBetweenLevels = 4000;
 // const timeBetweenLevels = 1;
@@ -72,7 +72,7 @@ export const Game = makeSprite({
     if (state.gameState === 'start-screen') {
       if (device.inputs.keysJustPressed[' ']) {
         // start new round
-        device.audio('RoccoW - Chipho.mp3').play();
+        device.audio('RoccoW - Chipho.mp3').play(0, true);
         return {
           gameData: null,
           activeGame: null,

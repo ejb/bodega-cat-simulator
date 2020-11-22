@@ -1,7 +1,10 @@
 const random = {
-  direction() {
+  direction(opts = {}) {
     let n = Math.round((Math.random() -0.5) * 3);
     if (n === -0) { n = 0 };
+    if (opts.zero === false & n === 0) {
+      return random.direction(opts);
+    }
     return n;
   },
   calcDirection(n, [min, max]) {
